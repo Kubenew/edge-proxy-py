@@ -1,0 +1,28 @@
+listen: "0.0.0.0:9100"
+
+routes:
+  - match:
+      path_prefix: "/api"
+    backends:
+      - url: "http://localhost:8000"
+      - url: "http://localhost:8001"
+
+  - match:
+      device_id: "sensor-1"
+    backends:
+      - url: "http://localhost:9001"
+
+cache:
+  enabled: true
+  ttl_seconds: 30
+  max_items: 200
+
+healthcheck:
+  enabled: true
+  interval_seconds: 5
+  timeout_seconds: 2
+  path: "/health"
+
+metrics:
+  enabled: true
+  path: "/metrics"
