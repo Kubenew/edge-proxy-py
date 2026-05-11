@@ -1,8 +1,11 @@
 from __future__ import annotations
 
+import logging
 import time
 from dataclasses import dataclass
-from typing import Dict, Optional, Tuple
+from typing import Dict, Optional
+
+logger = logging.getLogger(__name__)
 
 
 @dataclass
@@ -23,17 +26,15 @@ class MemoryCache:
         item = self._data.get(key)
         if not item:
             return None
-
-        if (time.time() - item.created) > self.ttl_seconds:
-            self._data.pop(key, None)
+        if time.time() - item.created > self.ttl_seconds:
+            del self._data[key]
             return None
-
         return item
 
     def set(self, key: str, item: CacheItem):
         if len(self._data) >= self.max_items:
-            # naive eviction: remove oldest
             oldest = min(self._data.items(), key=lambda kv: kv[1].created)[0]
-            self._data.pop(oldest, None)
-
+            del self._data[oldest]
+            logger.debug("Cache evicted oldest item %s", oldest)
         self._data[key] = item
+        logger.debug("Cache set %s (%d items)", key, len(self._data))
