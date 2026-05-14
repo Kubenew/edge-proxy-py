@@ -16,7 +16,11 @@ class Route:
 
     def matches(self, request: Request) -> bool:
         if self.path_prefix:
-            if not request.url.path.startswith(self.path_prefix):
+            path = request.url.path
+            prefix = self.path_prefix
+            if not path.startswith(prefix):
+                return False
+            if prefix != "/" and len(path) > len(prefix) and path[len(prefix)] != "/":
                 return False
 
         if self.device_id:

@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "edge-proxy-py"
-version = "0.1.1"
+version = "0.1.2"
 description = "Edge/IoT adaptive reverse proxy with policy routing, caching, and offline-aware fallback."
 readme = "README.md"
 requires-python = ">=3.10"
